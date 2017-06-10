@@ -1,0 +1,22 @@
+NOTAS ALGORITMO
+
+1. Creacion de Read-me file.
+
+- Hacer un smart indent a todo el codigo.
+- Seguir la linea limitante de Matlab, necesaria poder imprimir el codigo en un documento y que
+  no se vea incongruente con el codigo actual.
+
+- Significado lógico de variables de entrada en funciones.
+
+- Creacion de un banco de filtros.
+- Creacion de un banco de firmas.
+
+
+- Linea 38. Que es 'N,F3dB1,F3dB2'
+- Linea 37, el 50 de donde sale?
+
+
+PREGUNTAS
+
+- En que momento captan la señal del hidrofono?
+
