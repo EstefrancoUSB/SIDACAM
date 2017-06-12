@@ -1,54 +1,59 @@
 % VALORES FIRMA ACÚSTICA.
-
+% ---------------------------------------------------------------
+% Luis Alberto Tafur Jimenez, decano.ingenierias@usbmed.edu.co
+% Luis Esteban Gomez, estebang90@gmail.com
+% David Perez Zapata, b_hh@hotmail.es
+%
 %Este código reconoce los valores máximos por cada banco de filtro aplicado
 %a la señal, a éstos se les aplica una PSD para luego relacionar
 %valores y llegar a parametrizar la firma acústica.
-
 %
 %% Determinación de máximos.
-Dimension_fft = 2048*2;
-N_Frecuencias = 35;  
+Dim_fft = 4096; % Minima longitud de ventana para optima resolucion en fft                                
+N_Frec = 35;  
 Frec_Corte1 = 300;
-Firma_B = zeros(1,N_Frecuencias);
-Maximo_Bandas_dB = zeros(1,N_Frecuencias);
-Frecuencia_Maximos_B =zeros(1,N_Frecuencias);
-[Senal_Blanco, Frecuencia_Muestreo] = audioread('R2-INT1.wav');  
-[Senal_Ruido_Fondo, ~] = audioread('RUIDO DE FONDO RECOR.wav');
-[pxx,~]=pwelch(Senal_Blanco, hamming(Dimension_fft),[], [], Frecuencia_Muestreo);
-[pxx2,Frecuencias]=pwelch(Senal_Ruido_Fondo, hamming(Dimension_fft),[], [], Frecuencia_Muestreo);
+Step = 50;  %Delta del banco de filtros, desviación estándar
+Firma_B = zeros(1,N_Frec);
+Max_Bandas_dB = zeros(1,N_Frec);
+Frec_Max_B =zeros(1,N_Frec);
 
-% plot(f,10*log10(pxx),'r',f,10*log10(pxx2))
-% xlim([300,5000])
+[S_Blanco, Frec_Muestreo] = audioread('R2-INT1.wav');  
+[S_R_Fondo, ~] = audioread('RUIDO DE FONDO RECOR.wav');
+
 
 %% Llenado del vector de máximos.
-for i=1:N_Frecuencias
+for i=1:N_Frec
 % Diseño Filtro Pasa-Banda
 Orden_Filtro = 8;        
-Frec_Corte2 = Frec_Corte1 + 40;   
-Parametros_Filtro = fdesign.bandpass('N,F3dB1,F3dB2',Orden_Filtro,Frec_Corte1,Frec_Corte2,Frecuencia_Muestreo);
-Filtro = design(Parametros_Filtro,'butter');
-Senal_Blanco_Filtrada = filter(Filtro,Senal_Blanco);
-% PSD
-[pxx,Frecuencias]=pwelch(Senal_Blanco_Filtrada, hamming(Dimension_fft),[], [], Frecuencia_Muestreo);
+Frec_Corte2 = Frec_Corte1 + Step;   
+Param_Filtro = fdesign.bandpass('N,F3dB1,F3dB2',Orden_Filtro,Frec_Corte1,Frec_Corte2,...
+    Frec_Muestreo);
+Filtro = design(Param_Filtro,'butter');
+% Densidad Espectral de Potencia (Welch)
+S_Blanco_Filtrada = filter(Filtro,S_Blanco);
+[pxx,Frecuencias]=pwelch(S_Blanco_Filtrada, hamming(Dim_fft),[], [], Frec_Muestreo);
 pxxdB = 10*log10(pxx);
-% Máximos
-[Maximo_Bandas_dB(i),posicion] = max(pxxdB);
-Frecuencia_Maximos_B(i) = Frecuencias(posicion);
+% Extracción del Valor Máximo
+[Max_Bandas_dB(i),posicion] = max(pxxdB);
+Frec_Max_B(i) = Frecuencias(posicion);
 Frec_Corte1 = Frec_Corte2;
 end 
 
-%% Parámetros firma acústica
-Promedio = sum(Maximo_Bandas_dB)/N_Frecuencias;
-Comparacion_Prom = zeros(1,N_Frecuencias);
-Comparacion_Log = zeros(1,N_Frecuencias);
+%% Normalización y Parámetrización de la firma acústica
+Promedio = sum(Max_Bandas_dB)/N_Frec;
+Comparacion_Prom = zeros(1,N_Frec);
+Comparacion_Log = zeros(1,N_Frec);
 
-for i=1:N_Frecuencias
-    Comparacion_Prom(i) = Maximo_Bandas_dB(i)/Promedio;          
+for i=1:N_Frec
+    Comparacion_Prom(i) = Max_Bandas_dB(i)/Promedio;          
     Firma_B(i) =1./(Comparacion_Prom(i))^100;    
     Comparacion_Log(i) = log10(Comparacion_Prom(i));     
 end
     
-MaximosYSusFrecuencias_B = [Frecuencia_Maximos_B',Maximo_Bandas_dB',Comparacion_Prom',Firma_B',Comparacion_Log'];
+MaximosYSusFrecuencias_B = [Frec_Max_B',Max_Bandas_dB',Comparacion_Prom',Firma_B',...
+    Comparacion_Log'];
+
+%Guardar variables de la Firma Acústica
 save('Firma_B','Firma_B')
 save ('MaximosYSusFrecuencias_B','MaximosYSusFrecuencias_B')
 filename = 'MaximosYSusFrecuencias_B.xlsx';
