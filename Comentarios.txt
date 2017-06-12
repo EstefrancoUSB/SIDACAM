@@ -1,0 +1,8 @@
+SCRIPT MAXIMOSDEBANDAS
+
+- Línea 35, el 50 del paso del filtro se convirtió en una variable llamada "Step".
+- Línea 61, se hace un cambio para eliminar "Frecuencia(5)" automanizando la búsqueda de la frecuencia más cercana al Step.
+- Líne 18. se creó la variable "ID" que indica el factor de direccionalidad de un micrófono omnidireccional. Se reemplazó
+por el 1 en la línea 87.
+- Línea 53, "Umbrales_B" pasa a ser "Max_And_Frec_B", porque se confundía con la resta de umbrales "Rest_Umbral_B"
+- 
