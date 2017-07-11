@@ -1,8 +1,133 @@
-SCRIPT MAXIMOSDEBANDAS
+===ALGORITMO PARA LA DETECCIÓN DE BLANCOS EN EL MAR===
 
-- L�nea 35, el 50 del paso del filtro se convirti� en una variable llamada "Step".
-- L�nea 61, se hace un cambio para eliminar "Frecuencia(5)" automanizando la b�squeda de la frecuencia m�s cercana al Step.
-- L�ne 18. se cre� la variable "ID" que indica el factor de direccionalidad de un micr�fono omnidireccional. Se reemplaz�
-por el 1 en la l�nea 87.
-- L�nea 53, "Umbrales_B" pasa a ser "Max_And_Frec_B", porque se confund�a con la resta de umbrales "Rest_Umbral_B"
-- 
+Autores: Luis Alberto Tafur Jimenez 	e-mail: decano.ingenierias@usbmed.edu.co
+	 Luis Esteban Gómez Cadavid 	e-mail: estebang90@gmail.com
+	 David Perez Zapata		e-mail: b_hh@hotmail.es
+
+Requerimientos: Matlab R2014b o superior.
+
+
+===DESCRIPCIÓN====
+
+En este instructivo se describe el orden en el que se deben ejecutar los Scripts de Matlab, con el fin de poder 
+utilizar el algoritmo de detección de blancos en tiempo real. En cada Script se describen las variables de entrada
+y de salida.
+
+
+-----------------------------------------------------------------------------------------------------------------
+[1] - MaximosDeBandas.m
+
+ENTRADA
+
+Se deben entregar las siguientes variables: *** Que son estas variables, vectores, escalares, matrices...
+						de enteros, decimales?? Lo mismo para las salidas y para el 
+					  	resto de funciones. ***
+
+Dim_fft 	= 	Minima longitud de ventana para optima resolucion en fft
+Frec_Corte1	= 	Primera frecuencia de corte de un filtro pasa banda.
+N_Frec 		= 	Número de frecuencias máximas a extraer, tamaño del vector de máximos.
+Step 		= 		Paso en Hz del filtro pasa banda.
+
+Además debe cargarse los archivos de audio .wav correspondientes a la señal del blanco
+a analizar y el ruido de fondo.  
+------------------------------------------------------
+*** esto deberia estar arriba como variables de entrada, el programa debe recibir el nombre  de los archivos y listo ***
+R2-INT1.wav 		 - 	Señal del Blanco
+RUIDO DE FONDO RECOR.wav - 	Señal del ruido de fondo
+------------------------------------------------------
+
+SALIDA			*** se que sonará contradictorio, pero se debe reducir la descripcion de las salidas 
+			    para que no suene enredado. El usuario al entrar al programa se dará cuenta el 
+		   	    significado detallado de estas si el programa esta bien escrito y comentado,
+			    Dejar: Tipo de variable, y que representa. ***
+			
+Frec_Max_B 		= Vector donde se almacenan las frecuencias en las cuales se encontró un nivel máximo.
+Nivel_Ruido_Vector_B 	= Vector donde se almacena la suma de energía existente por cada filtro, donde la
+			  frecuencia central de cada filtro corresponde a la frecuencia donde se encontró un máximo
+			  de energía de la señal de ruido de fondo. 
+Nivel_S_B		= Vector donde se almacena la suma de energía existente por cada filtro, donde la
+			  frecuencia central de cada filtro corresponde a la frecuencia donde se encontró un máximo
+			  de energía de la señal del blanco. 
+
+
+Frecuencias		= Vector donde se almacenan las frecuencias en las cuales existe un valor de PSD, este 
+			  vector surge al realizar la función pwelch.
+Rest_Umbral_B		= Vector donde se almacenan los umbrales de detección obtenidos al aplicar ecuación de
+			  sonar pasivo
+Max_And_Frec_B		= Tipo Matriz, se almacena en una columna las frecuencias donde se encontró un máximo y en
+			  la otra el nivel en dB.
+-------------------------------------------------------------------------------------------------------------------
+ANOTACIONES_ESTEBAN 
+- Por lo que veo este programa deberia volverse una funcion. Donde las variables de entrada sean
+	Dim_fft, Frec_Corte1, N_Frec, señal_detectada = Step R2-INT1.wav, r_fondo = RUIDO DE FONDO RECOR.wav
+	Y el programa deberia entregar las variables que se tienen anotadas en el item SALIDA. De tal manera que su respectiva 
+	grabación en memoria se haga desde un programa principal. 
+- Puesto que se tienen dos cilos FOR, uno para el vector de maximos y otro para la detección de umbrales que hacen exactamente 
+	lo mismo, se puede pensar en juntarlos en un solo ciclo. 
+
+-------------------------------------------------------------------------------------------------------------------
+[2] - ValoresFirmaAcustica.m
+
+ENTRADA
+
+Se deben entregar las siguientes variables:
+
+Dim_fft 	= 	Minima longitud de ventana para optima resolucion en fft
+Frec_Corte1	= 	Primera frecuencia de corte de un filtro pasa banda.
+N_Frec 		= 	Número de frecuencias máximas a extraer, tamaño del vector de máximos.
+Step 		= 		Paso en Hz del filtro pasa banda.
+
+R2-INT1.wav 		 - 	Señal del Blanco
+RUIDO DE FONDO RECOR.wav - 	Señal del ruido de fondo
+
+SALIDA
+
+Firma_B/Firma_A		 = Tipo Vector, se almacena la firma acústica del blanco luego de  realizar una parametrización.
+MaximosYSusFrecuencias_B = Tipo Matriz
+------------------------------------------------------------------------------------------------------------------------
+ANOTACIONES_ESTEBAN
+
+- Faltan descripciones o comentarios con respecto a las variables de entrada. tambien se nota que las mismas deberian
+	ser argumentos de entrada de una posible 'funcion'. Lineas 12 - 21. 
+- Esta función usa un ciclo FOR muy parecido al de detección de máximos, sino es el mismo! Esto se puede acortar definitivamente
+	Por medio de funciones auxiliares o subfunciones. 
+- Linea 43, se halla la magnitud promedio de todas las frecuencias?
+- Linea 44 y 45 deben ir al comienzo donde se inicializan las variables. 
+- linea 49, 50 para que se hacen estas operaciones. 
+- linea 53, veo que se guarda Todo en una matriz que se vuelve un documento de excel. Eso esta muy bien y va con la idea que se 
+	    Tiene a futuro (linea 54). 
+
+- EN GENERAL, si este es el programa que graba la firma acústica de la embarcación (el cual se debe volver funcion), 
+	este puede ser modificado para actualizar la firma acústica de manera iterativa (usando promedio estadístico) 
+	Cada vez que la embarcación sea estudiada y su firma acústica sea grabada. Esto genera mayor y mayor precisión en el 
+	algoritmo. Es el principio del machine learning. 
+
+*** CONSEJO tanto esta como la funcion maximo de bandas se pueden alimentar de otra funcion llamada 'banco_filtros'. 
+----------------------------------------------------------------------------------------------------------------------
+[3] - Grabador.m
+
+ENTRADA
+
+n_bits 		= 	 tamaño de la muestra a grabar en bits (8-16-24)
+seg 		= 	 duracion de la grabacion en segundos
+n_canales 	=	 numero de canales (mono/stereo) 
+
+
+Carga las siguientes variables
+
+Firma_A
+Firma_B
+
+
+Llama a la función:
+ EstimacionVerde.m
+ EstimacionAmarilla.m
+
+SALIDA 
+
+disp('>>> Detección Freq 1')
+disp('>>> Detección Freq 2')
+disp('>>> Detección Freq 3')
+disp('Porcentaje de detección X%')
+disp('La distancia aproximada es: X m')
+-------------------------------------------------------------------------------------------------------------------
