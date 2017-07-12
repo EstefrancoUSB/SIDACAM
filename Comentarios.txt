@@ -131,3 +131,16 @@ disp('>>> Detección Freq 3')
 disp('Porcentaje de detección X%')
 disp('La distancia aproximada es: X m')
 -------------------------------------------------------------------------------------------------------------------
+ANOTACIONES_ESTEBAN
+
+- 17 a 23, Estos deben ser los argumentos de entrada de esta funcion.
+- 41 deberia ir al inicio, en inicializacion de variables, luego del help de la funcion.
+- 43 a 57, esta es una funcion que se usa en todos los algoritmos, ya la he comentado en sus programas anteriores
+	debemos hablar sobre que variables recibe esa función. 
+- 26, 27 debe ser una sola base de datos. 
+- 66 para que se hace esta operaion? (misma operacion que en linea 49-50 ValoresFirmaAcustica)
+- 71, base de datos en vez de data base.
+- 72 a 79, esto debe ser implementado en un FOR y posiblemente en una funcion.
+
+- 82 a 89 perfecto, debe quedarse en esta funcion.
+- 91 no entiendo esta linea, que es indicador
