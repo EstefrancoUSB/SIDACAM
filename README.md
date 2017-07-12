@@ -1,5 +1,8 @@
 # SIDACAM
 Repositorio para proyecto estudiantil de la USBMED. 
 
+Aqui se copiara lo que se vaya cambiando del algortimo
 
-Hola Muchachos, este archivo les da la bienvenida a el equipo SIDACAM. Este es solo un archivo inicial, en el cual podremos describir todos los codigos que tenemos. La idea es que aqui podamos hacer una descripcion de cada funcion y de cuando y como es llamada. Luego hagamos commit en los cambios. cmmo primera prueba del uso de Github.
+- Falta un archivo README (diferente a este), donde se den las instrucciones de que se corre primero en el algoritmo
+- Archivo comentarios puede ser borrado.
+- Se necesitan los archivos para correr el codigo (Indicar donde encontrarlos en google drive)
