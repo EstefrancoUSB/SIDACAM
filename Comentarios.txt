@@ -15,6 +15,8 @@ y de salida.
 
 
 -----------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------
 [1] - MaximosDeBandas.m
 
 ENTRADA
@@ -66,6 +68,8 @@ ANOTACIONES_ESTEBAN
 	lo mismo, se puede pensar en juntarlos en un solo ciclo. 
 
 -------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------
 [2] - ValoresFirmaAcustica.m
 
 ENTRADA
@@ -104,6 +108,8 @@ ANOTACIONES_ESTEBAN
 
 *** CONSEJO tanto esta como la funcion maximo de bandas se pueden alimentar de otra funcion llamada 'banco_filtros'. 
 ----------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------
 [3] - Grabador.m
 
 ENTRADA
@@ -140,7 +146,29 @@ ANOTACIONES_ESTEBAN
 - 26, 27 debe ser una sola base de datos. 
 - 66 para que se hace esta operaion? (misma operacion que en linea 49-50 ValoresFirmaAcustica)
 - 71, base de datos en vez de data base.
-- 72 a 79, esto debe ser implementado en un FOR y posiblemente en una funcion.
-
+- 72 a 79, esto debe ser implementado en un FOR y posiblemente en una funcion. 77 y 79, creo que son innecesarias
 - 82 a 89 perfecto, debe quedarse en esta funcion.
 - 91 no entiendo esta linea, que es indicador
+--------------------------------------------------------------------------------------------------------------------
+
+----------------------------------------------------------------------------------------------------------------------
+EstimacionAmarilla (o Verde)
+
+ENTRADAS
+- descripcion de argumentos de entrada para esta funcion (tipo de argumento, significado en el programa)
+
+SALIDAS
+- descripcion de los argumentos que entrega la funcion (tipo de argumento, significado en el programa)
+- 28 y 29 "Frecuencia_Maximos_A" no esta definidio, debe ser "Frec_Max_A".Los valores que se llaman de este vector
+	estan predefinidos y deben estar guardados en un vector de tal manera que accesemos a ellos por medio de una funcion. 
+- 30 a 39, Esto es algo que se ha hecho repetitivamente y que se esta hecho en el codigo principal grabador. No deberia volverse
+	hacer.
+- 44 La variable "Resta_Umbrales" esta definida en dB verdad?
+- 53 a 105 el codigo es repetitivo ya que hace el mismo procedimiento para diferentes frecuencias de interes
+- 110, 114 y 118 "Resta_Umbrales_Vector_A" un ha sido definido, debe ser "Rest_Umbral_A".
+- 122 a 130 cambiar por comando swtich ya que es mas rapdio
+
+- EN GENERAL las funciones de estimacion amarilla y verde deben volverse una sola funcion, la cual se alimenta de un archivo principal
+	tipo matriz el cual tiene la informacion deseada para cada barco. Imaginense que tengo 30 tipos de barcos a los cuales quiero
+	tomarles la firma acustica, no puedo tener 30 funciones. Debo tener solo una funcion y un archivo que se rediseña y que tiene 
+	toda la informacion de todos los barcos que sea pertinente. Esto hay que definirlo.
