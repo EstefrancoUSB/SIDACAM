@@ -25,8 +25,8 @@ load Frecuencias
 %% Filtro aplicado a la Primera frecuencia de interés
 Orden_Filtro = 8;         % Filter Order
 [~,position]=min(abs(Frecuencias-Step));
-Frec_Corte1 = Frecuencia_Maximos_A(8)-Frecuencias(position);   % cutoff frequency 1
-Frec_Corte2 = Frecuencia_Maximos_A(8)+Frecuencias(position);   % cutoff frequency 2
+Frec_Corte1 = Frec_Max_A(8)-Frecuencias(position);   % cutoff frequency 1
+Frec_Corte2 = Frec_Max_A(8)+Frecuencias(position);   % cutoff frequency 2
 Param_Filtro = fdesign.bandpass('N,F3dB1,F3dB2',Orden_Filtro,Frec_Corte1,Frec_Corte2,...
     Frec_Muestreo);
 Filtro = design(Param_Filtro,'butter');
@@ -53,8 +53,8 @@ end
 %% Filtro aplicado a la Segunda frecuencia de interés
 Orden_Filtro = 8;         % Filter Order
 [~,position]=min(abs(Frecuencias-Step));
-Frec_Corte1 = Frecuencia_Maximos_A(12)-Frecuencias(position);   % cutoff frequency 1
-Frec_Corte2 = Frecuencia_Maximos_A(12)+Frecuencias(position);   % cutoff frequency 2
+Frec_Corte1 = Frec_Max_A(12)-Frecuencias(position);   % cutoff frequency 1
+Frec_Corte2 = Frec_Max_A(12)+Frecuencias(position);   % cutoff frequency 2
 Param_Filtro = fdesign.bandpass('N,F3dB1,F3dB2',Orden_Filtro,Frec_Corte1,Frec_Corte2,...
     Frec_Muestreo);
 Filtro = design(Param_Filtro,'butter');
@@ -80,8 +80,8 @@ end
 %% Filtro aplicado a la Tercera frecuencia de interés
 Orden_Filtro = 8;         % Filter Order
 [~,position]=min(abs(Frecuencias-Step));
-Frec_Corte1 = Frecuencia_Maximos_B(24)-Frecuencias(position);   % cutoff frequency 1
-Frec_Corte2 = Frecuencia_Maximos_B(24)+Frecuencias(position);   % cutoff frequency 2
+Frec_Corte1 = Frec_Max_A(24)-Frecuencias(position);   % cutoff frequency 1
+Frec_Corte2 = Frec_Max_A(24)+Frecuencias(position);   % cutoff frequency 2
 Param_Filtro = fdesign.bandpass('N,F3dB1,F3dB2',Orden_Filtro,Frec_Corte1,Frec_Corte2,...
     Frec_Muestreo);
 Filtro = design(Param_Filtro,'butter');
@@ -92,7 +92,7 @@ S_Blanco_Filt = filter(Filtro,Captacion_Blanco);
 Nivel_S_Blanco_dB = 10*log10(sum(PSD_S_Blanco_Filt(find(Frecuencias==Frec_Corte1):...
     find(Frecuencias==Frec_Corte2))));
 %Ecuación de Sonar Pasivo
-Resta_Umbrales = Nivel_S_Blanco_dB - Nivel_Ruido_Vector_B(24) + ID;
+Resta_Umbrales = Nivel_S_Blanco_dB - Nivel_Ruido_Vector_A(24) + ID;
 Resta_Umbrales_Vector_Captura_A(3) = Resta_Umbrales;
 %Definición del Umbral de Detección a la Tercera frecuencia de interés
 if Resta_Umbrales >= 19.5
@@ -106,15 +106,15 @@ end
 
 %% Análisis de detección
 cont = 0;
-if Resta_Umbrales_Vector_Captura_A(1) >= Resta_Umbrales_Vector_A(8); 
+if Resta_Umbrales_Vector_Captura_A(1) >= Rest_Umbral_A(8); 
 disp('>>> Detección Freq 1')
 cont = cont + 1;
 end
-if Resta_Umbrales_Vector_Captura_A(2) >= Resta_Umbrales_Vector_A(12);
+if Resta_Umbrales_Vector_Captura_A(2) >= Rest_Umbral_A(12);
  disp('>>> Detección Freq 2')
  cont = cont + 1;
 end
-if Resta_Umbrales_Vector_Captura_A(3) >= Resta_Umbrales_Vector_A(24);
+if Resta_Umbrales_Vector_Captura_A(3) >= Rest_Umbral_A(24);
  disp('>>> Detección Freq 3')
  cont = cont + 1;
 end 
